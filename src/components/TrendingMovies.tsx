@@ -19,11 +19,22 @@ import Animated, {
 import {useNavigation} from '@react-navigation/native';
 import {Data} from '../constants/data';
 
-export const TrendingMovies = ({data}: any) => {
-  const navigation = useNavigation();
+import {MovieProps} from '../screens/HomeScreen';
+import {
+  NavigationScreenProps,
+  RootStackParamList,
+} from '../navigation/AppNavigation';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+
+type Props = {
+  data: MovieProps[];
+  navigation: NavigationScreenProps['navigation'];
+};
+
+export const TrendingMovies = ({data, navigation}: Props) => {
   const {width, height} = useWindowDimensions();
   const ITEM_WIDTH = width - width * 0.4;
-  const ITEM_HEIGHT = height - height * 0.65;
+  const ITEM_HEIGHT = height - height * 0.58;
   const MARGIN_HORIZONTAL = 20;
   const ITEM_FULL_WIDTH = ITEM_WIDTH + MARGIN_HORIZONTAL * 2;
   const SPACER = (width - ITEM_FULL_WIDTH) / 2;
@@ -36,17 +47,17 @@ export const TrendingMovies = ({data}: any) => {
     },
   });
 
-  const handleClick = (item: Data) => {
-    navigation.navigate('Movie', item);
+  const handleClick = (item: MovieProps) => {
+    navigation.navigate('Movie', {item});
   };
 
   return (
-    <View style={[styles.mainContainer, {height: height - height * 0.58}]}>
+    <View style={[styles.mainContainer, {height: height - height * 0.48}]}>
       <Text style={styles.text}>Trending</Text>
       <Animated.FlatList
         onScroll={onScroll}
         data={data}
-        keyExtractor={(item: Data) => `${item.id}${item.name}`}
+        keyExtractor={(item: MovieProps) => item.id.toString()}
         renderItem={({item, index}) => {
           return (
             <Item

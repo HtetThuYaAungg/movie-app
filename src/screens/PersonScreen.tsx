@@ -10,97 +10,171 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ChevronLeftIcon} from 'react-native-heroicons/outline';
 import {HeartIcon} from 'react-native-heroicons/solid';
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation} from '@react-navigation/native';
 import {customStyles, theme} from '../theme';
 import MovieList from '../components/MovieList';
+import Loading from '../components/Loading';
+import {
+  NavigationScreenProps,
+  RootStackParamList,
+} from '../navigation/AppNavigation';
+import {
+  fallbackPersonImage,
+  fetchPersonDetails,
+  fetchPersonMovies,
+  image500,
+} from '../api/moviedb';
+import {ApiResponse, MovieProps} from './HomeScreen';
 
-const PersonScreen = () => {
+type Props = {
+  navigation: NavigationScreenProps['navigation'];
+  route: RouteProp<RootStackParamList, 'Person'>;
+};
+
+export type PersonProps = {
+  adult: boolean;
+  also_known_as: string[];
+  biography: string;
+  birthday: string;
+  deathday: string | null;
+  gender: number;
+  homepage: string | null;
+  id: number;
+  imdb_id: string;
+  known_for_department: string;
+  name: string;
+  place_of_birth: string;
+  popularity: number;
+  profile_path: string;
+};
+
+const PersonScreen = ({navigation, route}: Props) => {
   const {width, height} = useWindowDimensions();
-  const navigation = useNavigation();
+
   const ios = Platform.OS === 'ios';
 
   const marginVertical = ios ? 0 : 42;
 
+  const Id = route.params.person.id;
+
   const [isFav, toggleFav] = useState<boolean>(false);
-  const [personMovie, setPersonMovie] = useState([1, 2, 3, 4, 5]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [person, setPerson] = useState<PersonProps>();
+  const [personMovie, setPersonMovie] = useState<MovieProps[]>([]);
+
+  useEffect(() => {
+    getPersonDetails(Id);
+    getPersonMovies(Id);
+  }, [route.params.person]);
+
+  const getPersonDetails = async (id: number | string) => {
+    const data = await fetchPersonDetails(id);
+    if (data) setPerson(data);
+    setIsLoading(false);
+  };
+
+  const getPersonMovies = async (id: number | string) => {
+    const data: any = await fetchPersonMovies(id);
+    console.log('helloej>>', data);
+    if (data && data?.cast) {
+      setPersonMovie(data.cast);
+    }
+  };
 
   return (
-    <ScrollView
-      style={styles.mainContainer}
-      contentContainerStyle={{paddingBottom: 20}}>
+    <View style={styles.mainContainer}>
       <StatusBar backgroundColor="#3A3B3C" />
 
-      <SafeAreaView
-        style={[styles.safeAreaView, {marginVertical: marginVertical}]}>
+      <SafeAreaView style={[styles.safeAreaView, {marginTop: marginVertical}]}>
         <TouchableOpacity
           style={[styles.iconBtn, customStyles.backGround]}
           onPress={() => navigation.goBack()}>
           <ChevronLeftIcon size={28} strokeWidth={2.5} color="white" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => toggleFav(!isFav)}>
-          <HeartIcon size={35} color={isFav ? 'red' : 'white'} />
-        </TouchableOpacity>
+        {!isLoading && (
+          <TouchableOpacity onPress={() => toggleFav(!isFav)}>
+            <HeartIcon size={35} color={isFav ? 'red' : 'white'} />
+          </TouchableOpacity>
+        )}
       </SafeAreaView>
 
-      <View>
-        <View style={styles.details}>
-          <View
-            style={[
-              styles.imageContainer,
-              {
-                height: height * 0.35,
-                width: height * 0.35,
-                borderRadius: height * 1,
-              },
-            ]}>
-            <Image
-              source={require('../assets/test2.jpg')}
-              style={{height: height * 0.4, width: height * 0.4}}
-            />
-          </View>
+      {isLoading ? (
+        <View style={{top: -50}}>
+          <Loading />
         </View>
-        <View style={styles.personDetails}>
-          <Text style={styles.name}>Keanu Reevs</Text>
-          <Text style={styles.address}>London, United Kingdom</Text>
-        </View>
-        <View style={styles.bio}>
-          <View style={styles.bioItem}>
-            <Text style={styles.bioTextOne}>Gender</Text>
-            <Text style={styles.bioTextTwo}>Male</Text>
+      ) : (
+        <ScrollView contentContainerStyle={{paddingBottom: 20}}>
+          <View style={styles.details}>
+            <View
+              style={[
+                styles.imageContainer,
+                {
+                  height: height * 0.35,
+                  width: height * 0.35,
+                  borderRadius: height * 1,
+                },
+              ]}>
+              <Image
+                // source={require('../assets/test2.jpg')}
+                source={{
+                  uri:
+                    image500(person?.profile_path as string) ||
+                    fallbackPersonImage,
+                }}
+                style={{height: height * 0.4, width: height * 0.4}}
+              />
+            </View>
           </View>
-          <View
-            style={[styles.bioItem, {borderRightWidth: 2, borderLeftWidth: 2}]}>
-            <Text style={styles.bioTextOne}>Birthday</Text>
-            <Text style={styles.bioTextTwo}>1964-09-02</Text>
+          <View style={styles.personDetails}>
+            <Text style={styles.name}>{person?.name}</Text>
+            <Text style={styles.address}>{person?.place_of_birth}</Text>
           </View>
-          <View style={[styles.bioItem, {borderRightWidth: 2}]}>
-            <Text style={styles.bioTextOne}>Known for</Text>
-            <Text style={styles.bioTextTwo}>Acting</Text>
+          <View style={[styles.bio, {width: width * 0.8}]}>
+            <View style={styles.bioItem}>
+              <Text style={styles.bioTextOne}>Gender</Text>
+              <Text style={styles.bioTextTwo}>
+                {person?.gender == 1 ? 'FeMale' : 'Male'}
+              </Text>
+            </View>
+            <View
+              style={[
+                styles.bioItem,
+                {borderRightWidth: 2, borderLeftWidth: 2},
+              ]}>
+              <Text style={styles.bioTextOne}>Birthday</Text>
+              <Text style={styles.bioTextTwo}>{person?.birthday}</Text>
+            </View>
+            <View style={[styles.bioItem, {borderRightWidth: 2}]}>
+              <Text style={styles.bioTextOne}>Known for</Text>
+              <Text style={styles.bioTextTwo}>
+                {person?.known_for_department}
+              </Text>
+            </View>
+            <View style={styles.bioItem}>
+              <Text style={styles.bioTextOne}>Popularity</Text>
+              <Text style={styles.bioTextTwo}>
+                {person?.popularity.toFixed(2)} %
+              </Text>
+            </View>
           </View>
-          <View style={styles.bioItem}>
-            <Text style={styles.bioTextOne}>Popularity</Text>
-            <Text style={styles.bioTextTwo}>64.23</Text>
+          <View style={styles.biography}>
+            <Text style={styles.biographyTitle}>Biography</Text>
+            <Text style={styles.biographyDesc}>
+              {person?.biography || 'N/A'}
+            </Text>
           </View>
-        </View>
-        <View style={styles.biography}>
-          <Text style={styles.biographyTitle}>Biography</Text>
-          <Text style={styles.biographyDesc}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur
-            id expedita dolor illum doloribus reiciendis culpa fugiat, sed
-            excepturi quasi odit perferendis accusamus, voluptas repellendus
-            repudiandae, nulla dolores iusto facere. Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Consequatur id expedita dolor illum
-            doloribus reiciendis culpa fugiat, sed excepturi quasi odit
-            perferendis accusamus, voluptas repellendus repudiandae, nulla
-            dolores iusto facere.
-          </Text>
-        </View>
-        <MovieList title="Movies" hideSeeAll={true} data={personMovie} />
-      </View>
-    </ScrollView>
+          <MovieList
+            title="Movies"
+            hideSeeAll={true}
+            data={personMovie}
+            navigation={navigation}
+          />
+        </ScrollView>
+      )}
+    </View>
   );
 };
 
@@ -112,8 +186,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#3A3B3C',
   },
   safeAreaView: {
-    top: 0,
-    zIndex: 20,
+    zIndex: 10,
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -159,6 +232,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
     flexDirection: 'row',
     justifyContent: 'center',
+    alignSelf: 'center',
     backgroundColor: 'gray',
     borderRadius: 24,
   },

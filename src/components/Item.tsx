@@ -17,16 +17,18 @@ import Animated, {
   useAnimatedStyle,
 } from 'react-native-reanimated';
 import {useNavigation} from '@react-navigation/native';
+import {MovieProps} from '../screens/HomeScreen';
+import {image500} from './../api/moviedb';
 
 type Props = {
-  item: Data;
+  item: MovieProps;
   index: number;
   width: number;
   height: number;
   marginHorizontal: number;
   x: SharedValue<number>;
   fullWidth: number;
-  handleClick: (item: Data) => void;
+  handleClick: (item: MovieProps) => void;
 };
 
 const Item = ({
@@ -83,6 +85,8 @@ const Item = ({
     };
   });
 
+  const test = require('../assets/gradient2.png');
+
   return (
     <Animated.View
       style={[
@@ -93,8 +97,10 @@ const Item = ({
       <TouchableOpacity onPress={() => handleClick(item)}>
         <View style={styles.imageContainer}>
           <Image
-            source={item.image}
-            style={[{width: width}]}
+            source={{
+              uri: image500(item.poster_path as string),
+            }}
+            style={{width: width, height: height}}
             resizeMode="cover"
           />
         </View>
@@ -123,7 +129,7 @@ const styles = StyleSheet.create({
         shadowRadius: 6,
       },
       android: {
-        elevation: 3,
+        elevation: 1,
       },
     }),
   },

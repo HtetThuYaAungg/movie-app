@@ -8,13 +8,16 @@ import {
 } from 'react-native';
 import React from 'react';
 import {NavigationProp} from '@react-navigation/native';
+import {NavigationScreenProps} from '../navigation/AppNavigation';
+import {CastProps} from '../screens/MovieScreen';
+import {fallbackPersonImage, image185} from '../api/moviedb';
 
 type Props = {
-  cast: any[];
-  navigaion: Omit<NavigationProp<ReactNavigation.RootParamList>, 'getState'>;
+  cast: CastProps[];
+  navigation: NavigationScreenProps['navigation'];
 };
 
-const Cast = ({cast, navigaion}: Props) => {
+const Cast = ({cast, navigation}: Props) => {
   let personName = 'Keanu Reevs';
   let characterName = 'John Wick';
 
@@ -31,7 +34,7 @@ const Cast = ({cast, navigaion}: Props) => {
               <TouchableOpacity
                 key={index}
                 style={styles.person}
-                onPress={() => navigaion.navigate('Person', person)}>
+                onPress={() => navigation.navigate('Person', {person})}>
                 <View
                   style={{
                     overflow: 'hidden',
@@ -43,20 +46,25 @@ const Cast = ({cast, navigaion}: Props) => {
                     borderWidth: 1,
                   }}>
                   <Image
-                    source={require('../assets/test2.jpg')}
+                    // source={require('../assets/test2.jpg')}
+                    source={{
+                      uri:
+                        image185(person.profile_path as string) ||
+                        fallbackPersonImage,
+                    }}
                     style={{borderRadius: 60, height: 60, width: 60}}
                   />
                 </View>
 
                 <Text style={styles.characterName}>
-                  {characterName.length > 10
-                    ? characterName.slice(0, 10) + '...'
-                    : characterName}
+                  {person.character.length > 10
+                    ? person.character.slice(0, 10) + '...'
+                    : person.character}
                 </Text>
                 <Text style={styles.personName}>
-                  {personName.length > 10
-                    ? personName.slice(0, 10) + '...'
-                    : personName}
+                  {person.name.length > 10
+                    ? person.name.slice(0, 10) + '...'
+                    : person.name}
                 </Text>
               </TouchableOpacity>
             );
