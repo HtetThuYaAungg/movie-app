@@ -86,20 +86,7 @@ const PersonScreen = ({navigation, route}: Props) => {
 
   return (
     <View style={styles.mainContainer}>
-      <StatusBar backgroundColor="#3A3B3C" />
-
-      <SafeAreaView style={[styles.safeAreaView, {marginTop: marginVertical}]}>
-        <TouchableOpacity
-          style={[styles.iconBtn, customStyles.backGround]}
-          onPress={() => navigation.goBack()}>
-          <ChevronLeftIcon size={28} strokeWidth={2.5} color="white" />
-        </TouchableOpacity>
-        {!isLoading && (
-          <TouchableOpacity onPress={() => toggleFav(!isFav)}>
-            <HeartIcon size={35} color={isFav ? 'red' : 'white'} />
-          </TouchableOpacity>
-        )}
-      </SafeAreaView>
+      <StatusBar translucent backgroundColor="transparent" />
 
       {isLoading ? (
         <View style={{top: -50}}>
@@ -107,6 +94,19 @@ const PersonScreen = ({navigation, route}: Props) => {
         </View>
       ) : (
         <ScrollView contentContainerStyle={{paddingBottom: 20}}>
+          <SafeAreaView
+            style={[styles.safeAreaView, {marginTop: marginVertical}]}>
+            <TouchableOpacity
+              style={[styles.iconBtn, customStyles.backGround]}
+              onPress={() => navigation.goBack()}>
+              <ChevronLeftIcon size={28} strokeWidth={2.5} color="white" />
+            </TouchableOpacity>
+            {!isLoading && (
+              <TouchableOpacity onPress={() => toggleFav(!isFav)}>
+                <HeartIcon size={35} color={isFav ? 'red' : 'white'} />
+              </TouchableOpacity>
+            )}
+          </SafeAreaView>
           <View style={styles.details}>
             <View
               style={[
@@ -132,7 +132,11 @@ const PersonScreen = ({navigation, route}: Props) => {
             <Text style={styles.name}>{person?.name}</Text>
             <Text style={styles.address}>{person?.place_of_birth}</Text>
           </View>
-          <View style={[styles.bio, {width: width * 0.8}]}>
+          <View
+            style={[
+              styles.bio,
+              {width: width > 500 ? width * 0.7 : width * 0.87},
+            ]}>
             <View style={styles.bioItem}>
               <Text style={styles.bioTextOne}>Gender</Text>
               <Text style={styles.bioTextTwo}>
@@ -207,7 +211,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     alignItems: 'center',
-    elevation: 5,
+    elevation: 1,
     overflow: 'hidden',
     borderWidth: 2,
     borderColor: '#A3A3A3',

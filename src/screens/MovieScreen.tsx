@@ -164,26 +164,27 @@ const MovieScreen = ({navigation, route}: Props) => {
   console.log('item', route.params.item);
 
   return (
-    <ScrollView
-      contentContainerStyle={{paddingBottom: 20}}
-      style={styles.mainContainer}>
+    <View style={styles.mainContainer}>
       <StatusBar translucent backgroundColor="transparent" />
-      <SafeAreaView style={[styles.safeAreaView, {marginTop: topMargin}]}>
-        <TouchableOpacity
-          style={[styles.iconBtn, customStyles.backGround]}
-          onPress={() => navigation.goBack()}>
-          <ChevronLeftIcon size={28} strokeWidth={2.5} color="white" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => toggleFav(!isFav)}>
-          <HeartIcon size={35} color={isFav ? theme.backGround : 'white'} />
-        </TouchableOpacity>
-      </SafeAreaView>
+
       {isLoading ? (
         <View>
           <Loading />
         </View>
       ) : (
-        <>
+        <ScrollView
+          contentContainerStyle={{paddingBottom: 20}}
+          style={styles.mainContainer}>
+          <SafeAreaView style={[styles.safeAreaView, {marginTop: topMargin}]}>
+            <TouchableOpacity
+              style={[styles.iconBtn, customStyles.backGround]}
+              onPress={() => navigation.goBack()}>
+              <ChevronLeftIcon size={28} strokeWidth={2.5} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => toggleFav(!isFav)}>
+              <HeartIcon size={35} color={isFav ? theme.backGround : 'white'} />
+            </TouchableOpacity>
+          </SafeAreaView>
           <View>
             <Image
               source={{
@@ -229,7 +230,7 @@ const MovieScreen = ({navigation, route}: Props) => {
                 let showDot = index + 1 != movie.genres.length;
                 return (
                   <Text key={index} style={styles.action}>
-                    {genre?.name} {showDot ? '.' : null}
+                    {genre?.name} {showDot ? '- ' : null}
                   </Text>
                 );
               })}
@@ -248,9 +249,9 @@ const MovieScreen = ({navigation, route}: Props) => {
               navigation={navigation}
             />
           )}
-        </>
+        </ScrollView>
       )}
-    </ScrollView>
+    </View>
   );
 };
 
@@ -290,13 +291,14 @@ const styles = StyleSheet.create({
   },
   genres: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'center',
     marginHorizontal: 16,
     paddingHorizontal: 4,
   },
   action: {
     color: '#A3A3A3',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'normal',
     textAlign: 'center',
   },

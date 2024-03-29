@@ -58,7 +58,9 @@ export type ApiResponse<T> = {
 };
 
 type Props = {
-  navigation: NavigationScreenProps['navigation'];
+  navigation: NavigationScreenProps['navigation'] & {
+    openDrawer?: () => void; // Add openDrawer function to the navigation prop type
+  };
 };
 
 const HomeScreen = ({navigation}: Props) => {
@@ -100,7 +102,12 @@ const HomeScreen = ({navigation}: Props) => {
       <StatusBar barStyle="light-content" backgroundColor="#242526" />
       <SafeAreaView style={styles.safeAreaView}>
         <View style={styles.topView}>
-          <Bars3CenterLeftIcon size={30} strokeWidth={4} color="white" />
+          <Bars3CenterLeftIcon
+            size={30}
+            strokeWidth={4}
+            color="white"
+            onPress={navigation.openDrawer}
+          />
           <Text
             style={{
               color: 'white',

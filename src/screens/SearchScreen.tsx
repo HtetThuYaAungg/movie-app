@@ -2,6 +2,7 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -80,6 +81,7 @@ const SearchScreen = ({navigation}: Props) => {
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
+      <StatusBar backgroundColor="#242526" />
       <View style={styles.searchContainer}>
         <TextInput
           onChangeText={text => handleDebounce(text)}
@@ -161,6 +163,7 @@ const styles = StyleSheet.create({
   safeAreaView: {
     backgroundColor: '#242526',
     flex: 1,
+    paddingTop: 41,
   },
   searchContainer: {
     marginHorizontal: 16,
