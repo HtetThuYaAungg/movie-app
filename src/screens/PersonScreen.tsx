@@ -17,10 +17,10 @@ import {RouteProp, useNavigation} from '@react-navigation/native';
 import {customStyles, theme} from '../theme';
 import MovieList from '../components/MovieList';
 import Loading from '../components/Loading';
-import {
-  NavigationScreenProps,
-  RootStackParamList,
-} from '../navigation/AppNavigation';
+// import {
+//   NavigationScreenProps,
+//   RootStackParamList,
+// } from '../navigation/AppNavigation';
 import {
   fallbackPersonImage,
   fetchPersonDetails,
@@ -28,10 +28,14 @@ import {
   image500,
 } from '../api/moviedb';
 import {ApiResponse, MovieProps} from './HomeScreen';
+import {
+  MainStackParamList,
+  NavigationMainStackScreenProps,
+} from '../navigation/StackNavigator';
 
 type Props = {
-  navigation: NavigationScreenProps['navigation'];
-  route: RouteProp<RootStackParamList, 'Person'>;
+  navigation: NavigationMainStackScreenProps['navigation'];
+  route: RouteProp<MainStackParamList, 'Person'>;
 };
 
 export type PersonProps = {

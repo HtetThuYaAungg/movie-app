@@ -22,10 +22,6 @@ import Cast from '../components/Cast';
 import MovieList from '../components/MovieList';
 import {ApiResponse, MovieProps} from './HomeScreen';
 import {
-  NavigationScreenProps,
-  RootStackParamList,
-} from '../navigation/AppNavigation';
-import {
   fallbackMoviePoster,
   fetchCreditMovieDetails,
   fetchMovieDetails,
@@ -33,6 +29,10 @@ import {
   image500,
 } from '../api/moviedb';
 import Loading from '../components/Loading';
+import {
+  MainStackParamList,
+  NavigationMainStackScreenProps,
+} from '../navigation/StackNavigator';
 
 const ios = Platform.OS === 'ios';
 const topMargin = ios ? 0 : 42;
@@ -45,8 +45,8 @@ type ParamsProps = {
 };
 
 type Props = {
-  navigation: NavigationScreenProps['navigation'];
-  route: RouteProp<RootStackParamList, 'Movie'>;
+  navigation: NavigationMainStackScreenProps['navigation'];
+  route: RouteProp<MainStackParamList, 'Movie'>;
 };
 
 export interface GenresApiInfo {

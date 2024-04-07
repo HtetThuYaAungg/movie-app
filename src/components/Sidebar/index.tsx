@@ -5,6 +5,7 @@ import {
   StatusBar,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React from 'react';
@@ -14,8 +15,12 @@ import {
   DrawerItemList,
 } from '@react-navigation/drawer';
 import {ScrollView} from 'react-native-gesture-handler';
+import {customStyles} from '../../theme';
+import {useAuthContext} from '../../context/AuthContext';
 
 const Sidebar = (props: DrawerContentComponentProps) => {
+  const {logOut} = useAuthContext();
+
   return (
     <ScrollView contentContainerStyle={{flex: 1}}>
       <StatusBar translucent backgroundColor="transparent" />
@@ -26,8 +31,7 @@ const Sidebar = (props: DrawerContentComponentProps) => {
           padding: 16,
           paddingTop: 52,
           borderTopRightRadius: 20,
-          borderBottomLeftRadius: 25,
-          flex: 0,
+          borderBottomLeftRadius: 20,
         }}>
         <View>
           <Image
@@ -41,13 +45,50 @@ const Sidebar = (props: DrawerContentComponentProps) => {
         <View
           style={{
             backgroundColor: '#1a202c',
-            flex: 1,
-            borderTopRightRadius: 25,
+            flex: 4.5,
+            borderTopRightRadius: 20,
             borderBottomRightRadius: 20,
             paddingTop: 20,
             paddingHorizontal: 5,
           }}>
           <DrawerItemList {...props} />
+        </View>
+        <View
+          style={{
+            flex: 1.5,
+            borderBottomRightRadius: 20,
+            backgroundColor: '#1a202c',
+          }}>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: '#3A3B3C',
+              borderTopLeftRadius: 20,
+              borderBottomRightRadius: 20,
+              paddingHorizontal: 20,
+              justifyContent: 'center',
+              gap: 4,
+            }}>
+            <TouchableOpacity
+              style={{
+                backgroundColor: '#1a202c',
+                paddingVertical: 10,
+                borderRadius: 10,
+                alignItems: 'center',
+              }}>
+              <Text style={customStyles.text}>Setting</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                backgroundColor: '#1a202c',
+                paddingVertical: 10,
+                borderRadius: 10,
+                alignItems: 'center',
+              }}
+              onPress={() => logOut()}>
+              <Text style={customStyles.text}>LogOut</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </ScrollView>
@@ -58,10 +99,8 @@ export default Sidebar;
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flex: 5,
+    flex: 1,
     backgroundColor: '#3A3B3C',
-    // marginTop: 20,
-    // borderTopRightRadius: 20,
     borderBottomRightRadius: 20,
   },
   profile: {

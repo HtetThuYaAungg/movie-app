@@ -8,13 +8,13 @@ import {
 } from 'react-native';
 import React from 'react';
 import {NavigationProp} from '@react-navigation/native';
-import {NavigationScreenProps} from '../navigation/AppNavigation';
 import {CastProps} from '../screens/MovieScreen';
 import {fallbackPersonImage, image185} from '../api/moviedb';
+import {NavigationMainStackScreenProps} from '../navigation/StackNavigator';
 
 type Props = {
   cast: CastProps[];
-  navigation: NavigationScreenProps['navigation'];
+  navigation: NavigationMainStackScreenProps['navigation'];
 };
 
 const Cast = ({cast, navigation}: Props) => {

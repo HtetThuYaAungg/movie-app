@@ -27,10 +27,11 @@ import {
   fetchUpcomingMovies,
 } from '../api/moviedb';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {
-  NavigationScreenProps,
-  RootStackParamList,
-} from '../navigation/AppNavigation';
+import {NavigationMainStackScreenProps} from '../navigation/StackNavigator';
+// import {
+//   NavigationScreenProps,
+//   RootStackParamList,
+// } from '../navigation/AppNavigation';
 
 export type MovieProps = {
   adult: boolean;
@@ -58,7 +59,7 @@ export type ApiResponse<T> = {
 };
 
 type Props = {
-  navigation: NavigationScreenProps['navigation'] & {
+  navigation: NavigationMainStackScreenProps['navigation'] & {
     openDrawer?: () => void; // Add openDrawer function to the navigation prop type
   };
 };

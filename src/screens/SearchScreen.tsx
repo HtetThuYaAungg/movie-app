@@ -15,7 +15,6 @@ import React, {useCallback, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {XCircleIcon} from 'react-native-heroicons/solid';
 import Loading from '../components/Loading';
-import {NavigationScreenProps} from '../navigation/AppNavigation';
 import {
   fallbackMoviePoster,
   fetchSearchMovies,
@@ -23,10 +22,11 @@ import {
   image342,
 } from '../api/moviedb';
 import {ApiResponse, MovieProps} from './HomeScreen';
+import {NavigationMainStackScreenProps} from '../navigation/StackNavigator';
 // import {debounce} from 'lodash';
 
 type Props = {
-  navigation: NavigationScreenProps['navigation'];
+  navigation: NavigationMainStackScreenProps['navigation'];
 };
 
 const SearchScreen = ({navigation}: Props) => {

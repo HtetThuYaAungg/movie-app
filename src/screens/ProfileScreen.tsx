@@ -15,15 +15,13 @@ import {
 } from 'react-native-heroicons/outline';
 import {customStyles} from '../theme';
 import Loading from '../components/Loading';
-import {
-  NavigationScreenProps,
-  RootStackParamList,
-} from '../navigation/AppNavigation';
+
 import {RouteProp} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
+import {NavigationDrawerScreenProps} from '../navigation/DrawerNavigator';
 
 type Props = {
-  navigation: NavigationScreenProps['navigation'] & {
+  navigation: NavigationDrawerScreenProps['navigation'] & {
     openDrawer?: () => void;
   };
 };
