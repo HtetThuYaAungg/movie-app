@@ -32,7 +32,11 @@ import {
 } from '@react-native-google-signin/google-signin';
 import {Controller, SubmitHandler, useForm} from 'react-hook-form';
 import {NavigationAuthStackScreenProps} from '../navigation/AuthNavigator';
-import {userLogin, userRegister} from '../api_services/userAuthService';
+import {
+  checkIfUserExists,
+  userLogin,
+  userRegister,
+} from '../api_services/userAuthService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useErrorHandler from '../hooks/useErrorHandler';
 import {RegisterFormType} from './RegisterScreen';
@@ -44,6 +48,10 @@ type Props = {
 export type LoginFormType = {
   email: string;
   password: string;
+};
+
+export type CheckEmailType = {
+  email: string;
 };
 
 const LoginScreen = ({navigation}: Props) => {
@@ -86,15 +94,22 @@ const LoginScreen = ({navigation}: Props) => {
             password: userInfo.user.id,
             confirmPassword: '',
           };
-          const result = await userRegister(googleUser);
-          // console.log('hello');
-          // console.log('result', result);
-          // const token = result.data.accessToken;
-          const token = result.response.accessToken;
-          // console.log('token>>>>>', token);
-          if (token) {
-            setUserToken(token);
-            AsyncStorage.setItem('userToken', token as string);
+          const isUserRegistered = await checkIfUserExists(googleUser);
+          if (isUserRegistered) {
+            const loginData: LoginFormType = {
+              email: userInfo.user.email,
+              password: userInfo.user.id,
+            };
+            await onSubmit(loginData);
+          } else {
+            const result = await userRegister(googleUser);
+
+            const token = result.response.accessToken;
+
+            if (token) {
+              setUserToken(token);
+              AsyncStorage.setItem('userToken', token as string);
+            }
           }
         } catch (err: any) {
           console.log('rr>>', err);

@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import React, {
   createContext,
   ReactNode,
@@ -50,10 +51,11 @@ const AuthProvider = ({children}: AuthProviderProps) => {
   //   setIsLoading(false);
   // };
 
-  const logOut = () => {
+  const logOut = async () => {
     setIsLoading(true);
     setUserToken(null);
     AsyncStorage.removeItem('userToken');
+    await GoogleSignin.signOut();
     setIsLoading(false);
   };
 

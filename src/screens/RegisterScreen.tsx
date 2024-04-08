@@ -69,7 +69,7 @@ const RegisterScreen = ({navigation}: Props) => {
       // console.log('result', result);
       // const token = result.data.accessToken;
       const token = result.response.accessToken;
-      // console.log('token>>>>>', token);
+      console.log('token>>>>>', token);
       if (token) {
         setUserToken(token);
         AsyncStorage.setItem('userToken', token as string);

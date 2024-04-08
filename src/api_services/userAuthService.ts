@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios";
 import { RegisterFormType } from "../screens/RegisterScreen";
 import apiInstance from "./api";
 import { handleAxiosError } from "../utils/common";
-import { LoginFormType } from "../screens/LoginScreen";
+import { CheckEmailType, LoginFormType } from "../screens/LoginScreen";
 
 
 export const userRegister = async ({email,userName,password}:RegisterFormType) => {
@@ -35,3 +35,14 @@ export const userLogin = async ({email,password}:LoginFormType) => {
   }
  
 }
+
+export const checkIfUserExists = async ({email} : LoginFormType )=> {
+  try {
+    const response = await apiInstance.post('/users/checkUser', {
+      email
+    })
+    return response.data
+  } catch (error) {
+    handleAxiosError(error);
+  }
+};
