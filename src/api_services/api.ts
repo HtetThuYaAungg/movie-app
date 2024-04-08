@@ -4,7 +4,7 @@ import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 
 const apiInstance: AxiosInstance = axios.create({
-  baseURL: "http://192.168.98.254:3000" ,
+  baseURL: "https://movie-app-backend-v6g9.onrender.com" ,
   timeout: 180000, // 3 mins
   headers: {
     "Content-Type": "application/json",
