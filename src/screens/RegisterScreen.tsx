@@ -181,6 +181,7 @@ const RegisterScreen = ({navigation}: Props) => {
               render={({field: {onChange, onBlur, value}}) => (
                 <InputField
                   label={'Password'}
+                  inputType="password"
                   icon={
                     <LockClosedIcon
                       size={20}
@@ -212,6 +213,7 @@ const RegisterScreen = ({navigation}: Props) => {
               render={({field: {onChange, onBlur, value}}) => (
                 <InputField
                   label={'Confirm Password'}
+                  inputType="password"
                   icon={
                     <LockClosedIcon
                       size={20}

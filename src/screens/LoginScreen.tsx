@@ -95,15 +95,16 @@ const LoginScreen = ({navigation}: Props) => {
             confirmPassword: '',
           };
           const isUserRegistered = await checkIfUserExists(googleUser);
-          if (isUserRegistered) {
+
+          if (isUserRegistered.response) {
             const loginData: LoginFormType = {
               email: userInfo.user.email,
               password: userInfo.user.id,
             };
             await onSubmit(loginData);
           } else {
+            await GoogleSignin.signOut();
             const result = await userRegister(googleUser);
-
             const token = result.response.accessToken;
 
             if (token) {
@@ -238,6 +239,7 @@ const LoginScreen = ({navigation}: Props) => {
             render={({field: {onChange, onBlur, value}}) => (
               <InputField
                 label={'Password'}
+                inputType="password"
                 icon={
                   <LockClosedIcon
                     size={20}
