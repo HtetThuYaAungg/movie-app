@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   DrawerContentComponentProps,
   DrawerContentScrollView,
@@ -17,9 +17,43 @@ import {
 import {ScrollView} from 'react-native-gesture-handler';
 import {customStyles} from '../../theme';
 import {useAuthContext} from '../../context/AuthContext';
+import useErrorHandler from '../../hooks/useErrorHandler';
+import {getUserProfile} from '../../api_services/userAuthService';
+
+enum Status {
+  ACTIVE,
+  INACTIVE,
+  DELETE,
+}
+
+type ProfileType = {
+  id: number;
+  email: string;
+  name: string;
+  status: Status;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 const Sidebar = (props: DrawerContentComponentProps) => {
   const {logOut} = useAuthContext();
+  const {customHandleError} = useErrorHandler();
+  const [profile, setProfile] = useState<ProfileType | null>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        // console.log('ehllo');
+        const data = await getUserProfile();
+        setProfile(data.user);
+        // console.log('data', data);
+      } catch (error) {
+        console.log('helloerror', error);
+        customHandleError(error);
+      }
+    };
+    fetchProfile();
+  }, []);
 
   return (
     <ScrollView contentContainerStyle={{flex: 1}}>
@@ -38,7 +72,7 @@ const Sidebar = (props: DrawerContentComponentProps) => {
             source={require('../../assets/test2.jpg')}
             style={styles.profile}
           />
-          <Text style={styles.name}>TaylorSwift</Text>
+          <Text style={styles.name}>{profile?.name}</Text>
         </View>
       </SafeAreaView>
       <View style={styles.mainContainer}>

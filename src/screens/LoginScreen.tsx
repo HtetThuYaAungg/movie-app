@@ -165,8 +165,8 @@ const LoginScreen = ({navigation}: Props) => {
         AsyncStorage.setItem('userToken', token as string);
       }
     } catch (err: any) {
-      console.log('rr>>', err);
       customHandleError(err);
+      await GoogleSignin.signOut();
     } finally {
       setShowLoadingModal(false);
     }

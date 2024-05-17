@@ -46,3 +46,12 @@ export const checkIfUserExists = async ({email} : LoginFormType )=> {
     handleAxiosError(error);
   }
 };
+
+export const getUserProfile = async () => {
+  try {
+    const response = await apiInstance.get('/users/userPorfile');
+    return response.data
+  } catch (error) {
+    handleAxiosError(error);
+  }
+}
